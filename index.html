@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forcast</title>
+</head>
+<script>
+    const appId = '521f30b8b65cf3ce94196993128436ca';
+    var city = "Delhi";
+    let data = "";
+    var x = document.getElementById("demo");
+
+    function getCityName() {
+        city = document.getElementById('city').value;
+    }
+
+    function dataDisplay(data) {
+
+        // Weather Info
+        let whT = document.createElement('h3');
+        whT.innerHTML = 'Weather Condition'
+        let wh = document.createElement('p');
+        wh.id = 'weatherInfo';
+        wh.innerHTML = data.weather[0].description;
+
+        document.getElementById('weather-forcasts').appendChild(whT);
+        document.getElementById('weather-forcasts').appendChild(wh);
+
+        // Humidity Info
+        let hmT = document.createElement('h3');
+        hmT.innerHTML = 'Humidity Condition'
+        let hm = document.createElement('p');
+        hm.id = 'humidityinfo';
+        hm.innerHTML = data.main.humidity + '%';
+
+        document.getElementById('weather-forcasts').appendChild(hmT);
+        document.getElementById('weather-forcasts').appendChild(hm);
+    }
+
+    // Based on city name provided through input field
+    function getWeatherForcastCity() {
+        fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${appId}`)
+            .then(res => res.json())
+            .then(geo => {
+                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geo[0].lat}&lon=${geo[0].lon}&appid=${appId}`)
+                    .then(res => res.json())
+                    .then(result => {
+                        dataDisplay(result);
+                    })
+            })
+    }
+</script>
+
+<body>
+    <div id="demo"></div>
+    <input id="city" type="text" placeholder="Enter city name" name="city" onkeyup="getCityName()" />
+    <button type="submit" onclick="getWeatherForcastCity()">Get Weather Forcast</button>
+    <div id="weather-forcasts">
+    </div>
+</body>
+
+</html>
