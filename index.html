@@ -5,60 +5,442 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Weather Forcast</title>
 </head>
+<style>
+    .weather-display {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-gap: 10px;
+        margin-top: 20px;
+    }
+
+    .info-display {
+        border: 1px solid rgb(204, 204, 204);
+        padding: 5px;
+        background-color: darkgreen;
+        color: white;
+        font-weight: 900;
+        border-radius: 24px;
+    }
+
+    .alert-info {
+        display: none;
+        padding: 20px;
+        background-color: orangered;
+        color: white;
+        font-weight: bold;
+        border-radius: 12px;
+    }
+</style>
 <script>
+    const data = {
+        "city_name": "Gurgaon",
+        "country_code": "IN",
+        "data": [
+            {
+                "app_max_temp": 23.6,
+                "app_min_temp": 15.4,
+                "clouds": 1,
+                "clouds_hi": 0,
+                "clouds_low": 0,
+                "clouds_mid": 0,
+                "datetime": "2022-12-09",
+                "dewpt": 6.3,
+                "high_temp": 26.4,
+                "low_temp": 12.6,
+                "max_dhi": null,
+                "max_temp": 24,
+                "min_temp": 15.4,
+                "moon_phase": 0.963139,
+                "moon_phase_lunation": 0.54,
+                "moonrise_ts": 1670589784,
+                "moonset_ts": 1670556230,
+                "ozone": 259.8,
+                "pop": 0,
+                "precip": 0,
+                "pres": 987.5,
+                "rh": 46,
+                "slp": 1014.1,
+                "snow": 0,
+                "snow_depth": 0,
+                "sunrise_ts": 1670549422,
+                "sunset_ts": 1670586848,
+                "temp": 18.9,
+                "ts": 1670526060,
+                "uv": 4.5,
+                "valid_date": "2022-12-09",
+                "vis": 24.128,
+                "weather": {
+                    "icon": "c01d",
+                    "description": "Clear Sky",
+                    "code": 800
+                },
+                "wind_cdir": "WNW",
+                "wind_cdir_full": "west-northwest",
+                "wind_dir": 299,
+                "wind_gust_spd": 1.3,
+                "wind_spd": 0.9
+            },
+            {
+                "app_max_temp": 24.2,
+                "app_min_temp": 12.6,
+                "clouds": 4,
+                "clouds_hi": 1,
+                "clouds_low": 0,
+                "clouds_mid": 0,
+                "datetime": "2022-12-10",
+                "dewpt": 11.2,
+                "high_temp": 24.6,
+                "low_temp": 13.2,
+                "max_dhi": null,
+                "max_temp": 24.6,
+                "min_temp": 12.6,
+                "moon_phase": 0.917849,
+                "moon_phase_lunation": 0.58,
+                "moonrise_ts": 1670679319,
+                "moonset_ts": 1670645513,
+                "ozone": 256.1,
+                "pop": 0,
+                "precip": 0,
+                "pres": 987.4,
+                "rh": 67,
+                "slp": 1014,
+                "snow": 0,
+                "snow_depth": 0,
+                "sunrise_ts": 1670635863,
+                "sunset_ts": 1670673262,
+                "temp": 17.9,
+                "ts": 1670612460,
+                "uv": 4.4,
+                "valid_date": "2022-12-10",
+                "vis": 24.128,
+                "weather": {
+                    "icon": "c02d",
+                    "description": "Few clouds",
+                    "code": 801
+                },
+                "wind_cdir": "NW",
+                "wind_cdir_full": "northwest",
+                "wind_dir": 316,
+                "wind_gust_spd": 0.1,
+                "wind_spd": 0.1
+            },
+            {
+                "app_max_temp": 24.6,
+                "app_min_temp": 13.1,
+                "clouds": 2,
+                "clouds_hi": 1,
+                "clouds_low": 0,
+                "clouds_mid": 0,
+                "datetime": "2022-12-11",
+                "dewpt": 10.5,
+                "high_temp": 25,
+                "low_temp": 13.6,
+                "max_dhi": null,
+                "max_temp": 25,
+                "min_temp": 13.1,
+                "moon_phase": 0.857251,
+                "moon_phase_lunation": 0.61,
+                "moonrise_ts": 1670769007,
+                "moonset_ts": 1670734474,
+                "ozone": 249.4,
+                "pop": 0,
+                "precip": 0,
+                "pres": 987.9,
+                "rh": 63,
+                "slp": 1014.6,
+                "snow": 0,
+                "snow_depth": 0,
+                "sunrise_ts": 1670722304,
+                "sunset_ts": 1670759678,
+                "temp": 18.3,
+                "ts": 1670698860,
+                "uv": 4.5,
+                "valid_date": "2022-12-11",
+                "vis": 24.128,
+                "weather": {
+                    "icon": "c02d",
+                    "description": "Few clouds",
+                    "code": 801
+                },
+                "wind_cdir": "NW",
+                "wind_cdir_full": "northwest",
+                "wind_dir": 306,
+                "wind_gust_spd": 0.6,
+                "wind_spd": 0.6
+            },
+            {
+                "app_max_temp": 24.3,
+                "app_min_temp": 13.6,
+                "clouds": 6,
+                "clouds_hi": 8,
+                "clouds_low": 0,
+                "clouds_mid": 0,
+                "datetime": "2022-12-12",
+                "dewpt": 9.5,
+                "high_temp": 24.8,
+                "low_temp": 13.4,
+                "max_dhi": null,
+                "max_temp": 24.8,
+                "min_temp": 13.6,
+                "moon_phase": 0.783721,
+                "moon_phase_lunation": 0.65,
+                "moonrise_ts": 1670858754,
+                "moonset_ts": 1670823136,
+                "ozone": 245.9,
+                "pop": 0,
+                "precip": 0,
+                "pres": 987.2,
+                "rh": 58,
+                "slp": 1013.8,
+                "snow": 0,
+                "snow_depth": 0,
+                "sunrise_ts": 1670808744,
+                "sunset_ts": 1670846095,
+                "temp": 18.5,
+                "ts": 1670785260,
+                "uv": 4.5,
+                "valid_date": "2022-12-12",
+                "vis": 24.128,
+                "weather": {
+                    "icon": "c02d",
+                    "description": "Few clouds",
+                    "code": 801
+                },
+                "wind_cdir": "WNW",
+                "wind_cdir_full": "west-northwest",
+                "wind_dir": 298,
+                "wind_gust_spd": 0.6,
+                "wind_spd": 0.6
+            },
+            {
+                "app_max_temp": 23.9,
+                "app_min_temp": 13.3,
+                "clouds": 2,
+                "clouds_hi": 0,
+                "clouds_low": 0,
+                "clouds_mid": 0,
+                "datetime": "2022-12-13",
+                "dewpt": 8.2,
+                "high_temp": 24.6,
+                "low_temp": 13.5,
+                "max_dhi": null,
+                "max_temp": 24.6,
+                "min_temp": 13.3,
+                "moon_phase": 0.69961,
+                "moon_phase_lunation": 0.68,
+                "moonrise_ts": 1670948490,
+                "moonset_ts": 1670911554,
+                "ozone": 245.4,
+                "pop": 0,
+                "precip": 0,
+                "pres": 987.6,
+                "rh": 54,
+                "slp": 1014.4,
+                "snow": 0,
+                "snow_depth": 0,
+                "sunrise_ts": 1670895183,
+                "sunset_ts": 1670932514,
+                "temp": 18.3,
+                "ts": 1670871660,
+                "uv": 4.5,
+                "valid_date": "2022-12-13",
+                "vis": 24.128,
+                "weather": {
+                    "icon": "c02d",
+                    "description": "Few clouds",
+                    "code": 801
+                },
+                "wind_cdir": "NW",
+                "wind_cdir_full": "northwest",
+                "wind_dir": 305,
+                "wind_gust_spd": 0.7,
+                "wind_spd": 0.7
+            },
+            {
+                "app_max_temp": 23.7,
+                "app_min_temp": 13.4,
+                "clouds": 2,
+                "clouds_hi": 0,
+                "clouds_low": 0,
+                "clouds_mid": 0,
+                "datetime": "2022-12-14",
+                "dewpt": 7.6,
+                "high_temp": 24.4,
+                "low_temp": 12.7,
+                "max_dhi": null,
+                "max_temp": 24.4,
+                "min_temp": 13.4,
+                "moon_phase": 0.607214,
+                "moon_phase_lunation": 0.71,
+                "moonrise_ts": 1671038186,
+                "moonset_ts": 1670999798,
+                "ozone": 249.3,
+                "pop": 0,
+                "precip": 0,
+                "pres": 987.1,
+                "rh": 52,
+                "slp": 1013.8,
+                "snow": 0,
+                "snow_depth": 0,
+                "sunrise_ts": 1670981622,
+                "sunset_ts": 1671018934,
+                "temp": 18.1,
+                "ts": 1670958060,
+                "uv": 4.5,
+                "valid_date": "2022-12-14",
+                "vis": 24.128,
+                "weather": {
+                    "icon": "c02d",
+                    "description": "Few clouds",
+                    "code": 801
+                },
+                "wind_cdir": "WNW",
+                "wind_cdir_full": "west-northwest",
+                "wind_dir": 297,
+                "wind_gust_spd": 0.6,
+                "wind_spd": 0.6
+            },
+            {
+                "app_max_temp": 22.9,
+                "app_min_temp": 12.6,
+                "clouds": 1,
+                "clouds_hi": 0,
+                "clouds_low": 0,
+                "clouds_mid": 0,
+                "datetime": "2022-12-15",
+                "dewpt": 7.4,
+                "high_temp": 23.6,
+                "low_temp": 12.3,
+                "max_dhi": null,
+                "max_temp": 23.6,
+                "min_temp": 12.6,
+                "moon_phase": 0.50892,
+                "moon_phase_lunation": 0.75,
+                "moonrise_ts": 1671127852,
+                "moonset_ts": 1671087941,
+                "ozone": 260.8,
+                "pop": 0,
+                "precip": 0,
+                "pres": 986.9,
+                "rh": 54,
+                "slp": 1013.7,
+                "snow": 0,
+                "snow_depth": 0,
+                "sunrise_ts": 1671068059,
+                "sunset_ts": 1671105356,
+                "temp": 17.4,
+                "ts": 1671044460,
+                "uv": 4.5,
+                "valid_date": "2022-12-15",
+                "vis": 24.128,
+                "weather": {
+                    "icon": "c01d",
+                    "description": "Clear Sky",
+                    "code": 800
+                },
+                "wind_cdir": "WNW",
+                "wind_cdir_full": "west-northwest",
+                "wind_dir": 287,
+                "wind_gust_spd": 0.4,
+                "wind_spd": 0.4
+            }
+        ],
+        "lat": 28.4646,
+        "lon": 77.0299,
+        "state_code": "10",
+        "timezone": "Asia/Kolkata"
+    }
     const appId = '521f30b8b65cf3ce94196993128436ca';
     var city = "Delhi";
-    let data = "";
-    var x = document.getElementById("demo");
+    const dayMapper = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saterday'];
 
     function getCityName() {
         city = document.getElementById('city').value;
     }
 
     function dataDisplay(data) {
+        const list = document.getElementById('weather-forcasts');
+        while (list.children.length) {
+            list.removeChild(list.firstChild);
+        }
 
-        // Weather Info
-        let whT = document.createElement('h3');
-        whT.innerHTML = 'Weather Condition'
-        let wh = document.createElement('p');
-        wh.id = 'weatherInfo';
-        wh.innerHTML = data.weather[0].description;
+        data.forEach(item => {
+            const wi = document.createElement('div');
+            wi.classList.add('info-display');
+            wi.style.border = '1px solid #ccc';
+            wi.style.paddingLeft = '15px';
+            // Day
+            const day = document.createElement('p');
+            day.innerHTML = `Day: ${dayMapper[new Date(item.datetime).getDay()]}`;
+            // Whether Info
+            const whT = document.createElement('p');
+            whT.innerHTML = `Weather Condition: ${item?.weather.description}`;
+            whT.id = 'weatherInfo';
+            // Temp Info
+            const hmT = document.createElement('p');
+            hmT.innerHTML = `Max Temp: ${item.max_temp} °C`
+            hmT.id = 'max_temp';
 
-        document.getElementById('weather-forcasts').appendChild(whT);
-        document.getElementById('weather-forcasts').appendChild(wh);
+            // min temp
+            const minTem = document.createElement('p');
+            minTem.innerHTML = `Max Temp: ${item.min_temp} °C`
+            minTem.id = 'max_temp';
 
-        // Humidity Info
-        let hmT = document.createElement('h3');
-        hmT.innerHTML = 'Humidity Condition'
-        let hm = document.createElement('p');
-        hm.id = 'humidityinfo';
-        hm.innerHTML = data.main.humidity + '%';
-
-        document.getElementById('weather-forcasts').appendChild(hmT);
-        document.getElementById('weather-forcasts').appendChild(hm);
+            wi.appendChild(day);
+            wi.appendChild(whT);
+            wi.appendChild(hmT);
+            wi.appendChild(minTem);
+            document.getElementById('weather-forcasts').appendChild(wi);
+        });
     }
 
     // Based on city name provided through input field
     function getWeatherForcastCity() {
-        fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${appId}`)
-            .then(res => res.json())
+        const options = {
+            method: 'GET',
+            url: 'https://api.openweathermap.org/geo/1.0/direct',
+            params: { q: city, limit: 1 },
+            headers: {
+                appid: appId
+            }
+        }
+
+        axios.request(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${appId}`)
             .then(geo => {
-                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geo[0].lat}&lon=${geo[0].lon}&appid=${appId}`)
-                    .then(res => res.json())
-                    .then(result => {
-                        dataDisplay(result);
-                    })
-            })
+                const options = {
+                    method: 'GET',
+                    url: 'https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily',
+                    params: { lat: geo?.data[0].lat, lon: geo.data[0].lon },
+                    headers: {
+                        'X-RapidAPI-Key': '1424010d68mshe70191a581afcf8p1aa83ajsn9029f78c14e7',
+                        'X-RapidAPI-Host': 'weatherbit-v1-mashape.p.rapidapi.com'
+                    }
+                };
+
+                axios.request(options).then(res => {
+                    if (res?.data?.data) {
+                        dataDisplay(res.data.data || [])
+                    }
+                }).catch(function (error) {
+                    dataDisplay(data.data);
+                    document.getElementById('alert-message').innerHTML = error?.response?.data?.message;
+                    document.getElementById('alert-message').style.display = 'block';
+                    console.error("Error:", error?.response?.data?.message);
+                });
+            }).catch(function (error) {
+                console.error(error);
+            });
     }
 </script>
 
 <body>
-    <div id="demo"></div>
     <input id="city" type="text" placeholder="Enter city name" name="city" onkeyup="getCityName()" />
     <button type="submit" onclick="getWeatherForcastCity()">Get Weather Forcast</button>
-    <div id="weather-forcasts">
+    <p id="alert-message" class="alert-info"></p>
+    <div id="weather-forcasts" class="weather-display">
     </div>
 </body>
 
